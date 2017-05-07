@@ -1,0 +1,17 @@
+html
+    head
+        title Dashboard
+        link(rel='stylesheet', href='/css/admin.css')
+        include includes/header
+        script(src='https://maps.googleapis.com/maps/api/js?libraries=places,drawing&key=AIzaSyDK4wSHzyqJ0xctjnM6OFEoRIAd5fMa2qM')
+    body
+        div.left-panel
+            ul.list-group
+                li.list-group-item Register Requests
+                    span.badge 12
+                li.divider
+                li.list-group-item Register Requests
+                    span.badge 12
+        div#map
+    script(src='/js/admin.js')
+

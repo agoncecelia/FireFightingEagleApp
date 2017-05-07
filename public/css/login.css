@@ -1,0 +1,19 @@
+.login-container{
+    margin-top: 12em;
+}
+.login-inputs-div{
+    padding: 15px;
+}
+.login-main-div{
+    padding: 15px;
+    background-color: #414751;
+}
+.login-main-div legend{
+    color: #fff;
+}
+.login-main-div button{
+    border-radius: 0;
+    background-color: #ff3c36;
+    color: #fff;
+    width: 100px;
+}

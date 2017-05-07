@@ -1,0 +1,30 @@
+html
+    head
+        title Register
+        link(rel='stylesheet', href='/css/register.css')
+        include includes/header
+        script(src='https://maps.googleapis.com/maps/api/js?libraries=places,drawing&key=AIzaSyDK4wSHzyqJ0xctjnM6OFEoRIAd5fMa2qM')
+    body
+        div.container
+            div.col-md-4.col-md-offset-4.register-container
+                div.register-main-div
+                    legend Register
+                    div.register-inputs-div
+                        div.form-group
+                            input.form-control(type='text', name='name', placeholder='departament name')
+                        div.form-group
+                            input.form-control(type='email', name='email', placeholder='email')
+                        div.form-group
+                            input.form-control(type='text', name='username', placeholder='username')
+                        div.form-group
+                            input.form-control(type='password', name='password', placeholder='pasword')
+                        div.form-group
+                            input.form-control(type='text', name='retypePassword', placeholder='retype password')
+                        div.form-group.text-right
+                            button.btn#btnNext(type='button') Next
+                                span.glyphicon.glyphicon-chevron-right
+            div.col-md-10.col-md-offset-1.register-map
+                h3 Select departament location
+                input.controls#pac-input(type='text',placeholder='Search Box')
+                div#map
+    script(src='/js/register.js')

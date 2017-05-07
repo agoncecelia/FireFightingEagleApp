@@ -1,0 +1,40 @@
+.register-container{
+    margin-top: 7em;
+}
+.register-map{
+    display: none;
+    margin-top: 4em;
+    /*background-color: #414751;*/
+    padding: 0px !important;
+}
+.register-main-div{
+    padding: 15px;
+    background-color: #414751;
+}
+.register-main-div legend{
+    color: #fff;
+}
+.register-main-div button, .register-map button{
+    border-radius: 0;
+    background-color: #ff3c36;
+    color: #fff;
+    width: 100px;
+}
+.register-inputs-div{
+    padding: 15px;
+}
+#map{
+    height: calc(100% - 15em);
+}
+#pac-input{
+    width: 250px;
+    height: 30px;
+    margin: 5px;
+    border: none;
+    padding-left: 5px;
+}
+#btnNextPolygon{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
