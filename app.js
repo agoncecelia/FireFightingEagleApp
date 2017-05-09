@@ -40,12 +40,15 @@ app.get('/admin', function (req, res) {
     }
 });
 
+app.get('/register', function (req, res) {
+    return res.render('register');
+})
+
 app.post('/authenticate', function (req, res) {
     var body = req.body;
     var username = body.username;
     var password = body.password;
 
-    var request = require('request');
     request.post({
         headers: {'content-type' : 'application/x-www-form-urlencoded'},
         url:     API_URL + 'users/authenticate',
@@ -78,9 +81,43 @@ app.post('/authenticate', function (req, res) {
 
 });
 
-app.get('/register', function (req, res) {
-    return res.render('register');
-})
+app.post('/register', function (req, res) {
+    var body = req.body;
+    var departmentName = body.departmentName;
+    var email = body.email;
+    var username = body.username;
+    var password = body.password;
+    var servingArea = body.servingArea;
+    var departmentLocation = body.departmentLocation;
+
+    console.log(JSON.stringify(departmentLocation))
+
+    request.post({
+        headers: {'content-type' : 'application/x-www-form-urlencoded'},
+        url:     API_URL + 'users/register',
+        form:    {
+            departmentName: departmentName,
+            departmentLocation: JSON.stringify(departmentLocation),
+            servingArea: JSON.stringify(servingArea),
+            email: email,
+            username: username,
+            password: password,
+            role: 'user'
+        }
+    }, function(error, response, body){
+        if(error){
+            return res.status(500).send(error);
+        }
+
+        try{
+            var result = JSON.parse(body);
+            return res.send(result);
+        }catch (e){
+            return res.status(500).send(e);
+        }
+    });
+
+});
 
 app.listen(runningPort, function () {
     console.log('Example app listening on port ', runningPort)

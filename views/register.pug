@@ -11,7 +11,7 @@ html
                     legend Register
                     div.register-inputs-div
                         div.form-group
-                            input.form-control.inputs(type='text', name='name', placeholder='departament name')
+                            input.form-control.inputs(type='text', name='name', placeholder='department name')
                         div.form-group
                             input.form-control.inputs(type='email', name='email', placeholder='email')
                         div.form-group
@@ -24,7 +24,7 @@ html
                             button.btn#btnNext(type='button') Next
                                 span.glyphicon.glyphicon-chevron-right
             div.col-md-10.col-md-offset-1.register-map
-                h3 Select departament location
+                h3#mapDesc
                 input.controls#pac-input(type='text',placeholder='Search Box')
                 div#map
     script(src='/js/register.js')

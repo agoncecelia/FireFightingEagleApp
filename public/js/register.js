@@ -9,7 +9,8 @@ var register = {
         type: 'Polygon',
         coordinates: null,
     },
-    deparmentLocation: {
+    departmentLocation: {
+        type: 'Point',
         coordinates: null
     },
     email: null,
@@ -31,6 +32,7 @@ $('body').on('click', '#btnNext', function () {
 
         $('.register-container').hide();
         $('.register-map').show();
+        $('#mapDesc').text("Select department location");
 
         register.departmentName = $("input[name=name").val();
 
@@ -52,42 +54,21 @@ $('body').on('click', '#btnNext', function () {
     }
 });
 
-function validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-}
-
-function validateInputs(inputClass) {
-    var inputs = $('.' + inputClass);
-    var isInvalid = false;
-
-    for(var i = 0; i < inputs.length; i++){
-        if($(inputs[i]).val() == ''){
-            isInvalid = true;
-
-            $(inputs[i]).css('border-color', 'red');
-        }
-
-        if($(inputs[i]).attr('type') == 'email'){
-            if(!validateEmail($(inputs[i]).val())){
-                isInvalid = true;
-
-                $(inputs[i]).css('border-color', 'red');
-            }
-        }
-    }
-
-    if(isInvalid){
-        return false
-    }else{
-        return true;
-    }
-}
-
 $('body').on('click', '#btnNextPolygon', function () {
-    clearMap();
+    $('#mapDesc').text("Draw departamnt area");
 
+    clearMap();
     initPolygon()
+});
+
+$('body').on('click', '#btnFinishPolygon', function () {
+    request(register, 'POST', 'register', function (response) {
+        var result = response.responseJSON;
+        alert(result.msg);
+        if(result.success){
+            location.href = '/login';
+        }
+    })
 });
 
 function clearMap() {
@@ -216,13 +197,13 @@ function autoComplete() {
             draggable: true,
         });
 
-        register.deparmentLocation.coordinates = {
+        register.departmentLocation.coordinates = {
             latitude: marker.getPosition().lat(),
             longitude: marker.getPosition().lng()
         };
 
         marker.addListener('dragend', function (event) {
-            register.deparmentLocation.coordinates = {
+            register.departmentLocation.coordinates = {
                 latitude: event.latLng.lat(),
                 longitude: event.latLng.lng()
             }
