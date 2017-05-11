@@ -1,0 +1,12 @@
+html
+    head
+        title Dashboard
+        link(rel='stylesheet', href='/css/dashboard.css')
+        include includes/header
+        script(src='https://maps.googleapis.com/maps/api/js?libraries=places,drawing&key=AIzaSyDK4wSHzyqJ0xctjnM6OFEoRIAd5fMa2qM')
+    body
+        div#map
+    script.
+        var user = !{JSON.stringify(user)};
+    script(src='/js/dashboard.js')
+

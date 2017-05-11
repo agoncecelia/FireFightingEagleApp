@@ -24,3 +24,6 @@
     height: 3px;
     cursor: default;
 }
+.pending-list{
+    display: none;
+}

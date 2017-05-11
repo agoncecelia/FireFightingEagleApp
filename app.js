@@ -19,10 +19,41 @@ app.use(bodyParser.urlencoded({
     limit: '10mb'
 }));
 
-app.use(cookieParser())
+app.use(cookieParser());
 
-app.get('/', function (req, res) {
-    res.send("Welcome")
+var isAuthenticated = function (req, res, next) {
+    if(req.cookies.token){
+        var token = req.cookies.token;
+
+        request.post({
+            headers: {
+                'content-type' : 'application/x-www-form-urlencoded',
+                'Authorization' : token
+            },
+            url:     API_URL + 'users/isAuthenticated',
+            form:    {}
+        }, function(error, response, body){
+            if(error){
+                return res.status(500).send(error);
+            }
+
+            try{
+                var result = JSON.parse(body);
+                req.user = result.user;
+
+                next();
+            }catch (e){
+                return res.status(500).send(e);
+            }
+        });
+
+    }else{
+        return res.redirect('/login');
+    }
+}
+
+app.get('/', isAuthenticated, function (req, res) {
+    return res.render('dashboard', {user: req.user});
 });
 
 app.get('/login', function (req, res) {
@@ -32,6 +63,8 @@ app.get('/login', function (req, res) {
 app.get('/admin', function (req, res) {
     if(req.cookies.token){
         var token = req.cookies.token;
+
+
 
         return res.render('admin');
 
@@ -64,13 +97,15 @@ app.post('/authenticate', function (req, res) {
         try{
             var result = JSON.parse(body);
             if(result.success){
-                // if(result.user.role == "ADMIN"){
-                //
-                // }else{
-                //
-                // }
-                res.cookie('token', result.token);
-                return res.redirect('/admin');
+                if(result.user.role == "admin"){
+
+                }else{
+                    res.cookie('token', result.token);
+
+                    return res.redirect('/');
+                }
+                // res.cookie('token', result.token);
+                // return res.redirect('/admin');
             }else{
                 return res.status(401).send("Wrong username or password")
             }
@@ -90,15 +125,13 @@ app.post('/register', function (req, res) {
     var servingArea = body.servingArea;
     var departmentLocation = body.departmentLocation;
 
-    console.log(JSON.stringify(departmentLocation))
-
     request.post({
         headers: {'content-type' : 'application/x-www-form-urlencoded'},
         url:     API_URL + 'users/register',
         form:    {
             departmentName: departmentName,
-            departmentLocation: JSON.stringify(departmentLocation),
-            servingArea: JSON.stringify(servingArea),
+            departmentLocation: departmentLocation,
+            servingArea: servingArea,
             email: email,
             username: username,
             password: password,

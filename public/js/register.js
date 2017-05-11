@@ -62,6 +62,9 @@ $('body').on('click', '#btnNextPolygon', function () {
 });
 
 $('body').on('click', '#btnFinishPolygon', function () {
+    register.servingArea = JSON.stringify(register.servingArea);
+    register.departmentLocation = JSON.stringify(register.departmentLocation);
+
     request(register, 'POST', 'register', function (response) {
         var result = response.responseJSON;
         alert(result.msg);
