@@ -41,6 +41,11 @@ var isAuthenticated = function (req, res, next) {
                 var result = JSON.parse(body);
                 req.user = result.user;
 
+                if(result.user.role == 'user'){
+                    next();
+                }else{
+                    return res.redirect('/login');
+                }
                 next();
             }catch (e){
                 return res.status(500).send(e);
@@ -50,7 +55,42 @@ var isAuthenticated = function (req, res, next) {
     }else{
         return res.redirect('/login');
     }
-}
+};
+
+var isAuthenticatedAdmin = function (req, res, next) {
+    if(req.cookies.token){
+        var token = req.cookies.token;
+
+        request.post({
+            headers: {
+                'content-type' : 'application/x-www-form-urlencoded',
+                'Authorization' : token
+            },
+            url:     API_URL + 'users/isAuthenticated',
+            form:    {}
+        }, function(error, response, body){
+            if(error){
+                return res.status(500).send(error);
+            }
+
+            try{
+                var result = JSON.parse(body);
+                req.user = result.user;
+                if(result.user.role == 'admin'){
+                    next();
+                }else{
+                    return res.redirect('/login');
+                }
+
+            }catch (e){
+                return res.status(500).send(e);
+            }
+        });
+
+    }else{
+        return res.redirect('/login');
+    }
+};
 
 app.get('/', isAuthenticated, function (req, res) {
     return res.render('dashboard', {user: req.user});
@@ -60,13 +100,31 @@ app.get('/login', function (req, res) {
     return res.render('login')
 });
 
-app.get('/admin', function (req, res) {
+app.get('/admin', isAuthenticatedAdmin, function (req, res) {
     if(req.cookies.token){
         var token = req.cookies.token;
 
+        request.get({
+            headers: {
+                'content-type' : 'application/x-www-form-urlencoded',
+                'Authorization' : token
+            },
+            url:     API_URL + 'users/pendingUsers',
+            form:    {}
+        }, function(error, response, body){
+            if(error){
+                return res.status(500).send(error);
+            }
 
+            try{
+                var result = JSON.parse(body);
 
-        return res.render('admin');
+                return res.render('admin', {pendings: result.length});
+
+            }catch (e){
+                return res.status(500).send(e);
+            }
+        });
 
     }else{
         return res.redirect('/login');
@@ -75,6 +133,59 @@ app.get('/admin', function (req, res) {
 
 app.get('/register', function (req, res) {
     return res.render('register');
+});
+
+app.get('/pendingusers', function (req, res) {
+    var token = req.cookies.token;
+
+    request.get({
+        headers: {
+            'content-type' : 'application/x-www-form-urlencoded',
+            'Authorization' : token
+        },
+        url:     API_URL + 'users/pendingUsers',
+        form:    {}
+    }, function(error, response, body){
+        if(error){
+            return res.status(500).send(error);
+        }
+
+        try{
+            var result = JSON.parse(body);
+
+            return res.send(result);
+
+        }catch (e){
+            return res.status(500).send(e);
+        }
+    });
+})
+
+app.post('/approveuser', function (req, res) {
+    var token = req.cookies.token;
+    var body = req.body;
+
+    request.post({
+        headers: {
+            'content-type' : 'application/x-www-form-urlencoded',
+            'Authorization' : token
+        },
+        url:     API_URL + 'users/approveUser/' + body.id,
+        form:    {}
+    }, function(error, response, body){
+        if(error){
+            return res.status(500).send(error);
+        }
+
+        try{
+            var result = JSON.parse(body);
+
+            return res.send(result);
+
+        }catch (e){
+            return res.status(500).send(e);
+        }
+    });
 })
 
 app.post('/authenticate', function (req, res) {
@@ -98,14 +209,14 @@ app.post('/authenticate', function (req, res) {
             var result = JSON.parse(body);
             if(result.success){
                 if(result.user.role == "admin"){
+                    res.cookie('token', result.token);
 
+                    return res.redirect('/admin');
                 }else{
                     res.cookie('token', result.token);
 
                     return res.redirect('/');
                 }
-                // res.cookie('token', result.token);
-                // return res.redirect('/admin');
             }else{
                 return res.status(401).send("Wrong username or password")
             }

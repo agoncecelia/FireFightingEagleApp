@@ -1,0 +1,23 @@
+#mapModal.modal.fade(role='dialog')
+    .modal-dialog
+        // Modal content
+        .modal-content
+            .modal-header
+                button.close(type='button', data-dismiss='modal') ×
+                h4.modal-title Department Information
+            .modal-body
+                div.col-md-6
+                    label Department
+                    p#dName
+                div.col-md-6
+                    label Email
+                    p#dEmail
+                div.col-md-12
+                    #dMap
+            .modal-footer
+                button.btn.btn-success#btnApprove(type='button', data-dismiss='modal')
+                    span.glyphicon.glyphicon-ok
+                    |  Approve
+                //button.btn.btn-danger#btnDeny(type='button', data-dismiss='modal')
+                //    span.glyphicon.glyphicon-remove
+                //    |  Deny

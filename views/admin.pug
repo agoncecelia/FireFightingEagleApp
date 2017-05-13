@@ -2,16 +2,27 @@ html
     head
         title Dashboard
         link(rel='stylesheet', href='/css/admin.css')
-        include includes/header
         script(src='https://maps.googleapis.com/maps/api/js?libraries=places,drawing&key=AIzaSyDK4wSHzyqJ0xctjnM6OFEoRIAd5fMa2qM')
+        include includes/header
     body
+        include includes/mapmodal
         div.left-panel
-            ul.list-group
-                li.list-group-item Register Requests
-                    span.badge 12
-                li.divider
-            div.pending-list
+            ul.list-group.requests-div
+                li.list-group-item.pendings Register Requests
+                    span.badge
+            div.pendings-div
+                ul.list-group.pendings-list
         div#map
+    script.
+        var pendings = {
+            counter: !{JSON.stringify(pendings)},
+            list: {},
+            getCounter: function () {
+                this.counter = Object.keys(this.list).length;
+                $('.pendings span').text(this.counter);
 
+                return;
+            }
+        };
     script(src='/js/admin.js')
 

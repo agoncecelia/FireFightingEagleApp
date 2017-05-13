@@ -24,6 +24,27 @@
     height: 3px;
     cursor: default;
 }
-.pending-list{
+.pendings-div{
     display: none;
+}
+.locate-span{
+    float: right;
+}
+#dMap{
+    height: 300px;
+}
+.modal-body {
+    min-height: 400px;
+}
+.modal-footer{
+    text-align: center !important;
+}
+.modal-footer button{
+    border-radius: 0;
+    color: #fff;
+    border: none !important;
+    width: 100px;
+}
+.goback-li{
+    background-color: #414751 !important;
 }
