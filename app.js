@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var runningPort = 3500;
 var request = require('request');
 var cookieParser = require('cookie-parser');
-var API_URL = 'http://192.168.100.6:3000/api/';
+var API_URL = 'http://192.168.100.14:3000/api/';
 
 
 app.set('view engine', 'pug');
@@ -48,7 +48,7 @@ var isAuthenticated = function (req, res, next) {
                 }
                 next();
             }catch (e){
-                return res.status(500).send(e);
+                return res.redirect('/login');
             }
         });
 
@@ -83,7 +83,7 @@ var isAuthenticatedAdmin = function (req, res, next) {
                 }
 
             }catch (e){
-                return res.status(500).send(e);
+                return res.redirect('/login');
             }
         });
 

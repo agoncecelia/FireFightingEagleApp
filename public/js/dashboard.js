@@ -1,7 +1,7 @@
 var map;
 
 $(document).ready(function () {
-    var userLocation = JSON.parse(user.departmentLocation)
+    var userLocation = user.departmentLocation;
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 16.460134, lng: -12.488326},
         zoom: 2,
@@ -9,15 +9,17 @@ $(document).ready(function () {
         disableDefaultUI: true,
     });
 
-    var servingArea = JSON.parse(user.servingArea);
+    var servingArea = user.servingArea;
 
     var coords = [];
 
-    for(var i = 0; i < servingArea.coordinates.length; i++){
-        var row = servingArea.coordinates[i];
+    // servingArea.coordinates[0].splice(servingArea.coordinates[0].length - 1, 1);
+
+    for(var i = 0; i < servingArea.coordinates[0].length; i++){
+        var row = servingArea.coordinates[0][i];
         coords.push({
-            lat: row.latitude,
-            lng: row.longitude
+            lat: row[0],
+            lng: row[1]
         })
     }
 

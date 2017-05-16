@@ -62,8 +62,8 @@ $('body').on('click', '#btnNextPolygon', function () {
 });
 
 $('body').on('click', '#btnFinishPolygon', function () {
-    register.servingArea = JSON.stringify(register.servingArea);
-    register.departmentLocation = JSON.stringify(register.departmentLocation);
+    register.servingArea = register.servingArea;
+    register.departmentLocation = register.departmentLocation;
 
     request(register, 'POST', 'register', function (response) {
         var result = response.responseJSON;
@@ -141,13 +141,15 @@ function convertCoords(overlay) {
 
     for(var i = 0; i < positions.length; i++){
         var row = positions[i];
-        coords.push({
-            latitude: row.lat(),
-            longitude: row.lng()
-        })
+        coords.push([
+            row.lat(),
+            row.lng()
+        ]);
     }
 
-    register.servingArea.coordinates = coords;
+    coords.push(coords[0]);
+
+    register.servingArea.coordinates = [coords];
 }
 
 function autoComplete() {
@@ -200,16 +202,16 @@ function autoComplete() {
             draggable: true,
         });
 
-        register.departmentLocation.coordinates = {
-            latitude: marker.getPosition().lat(),
-            longitude: marker.getPosition().lng()
-        };
+        register.departmentLocation.coordinates = [
+            marker.getPosition().lat(),
+            marker.getPosition().lng()
+        ];
 
         marker.addListener('dragend', function (event) {
-            register.departmentLocation.coordinates = {
-                latitude: event.latLng.lat(),
-                longitude: event.latLng.lng()
-            }
+            register.departmentLocation.coordinates = [
+                event.latLng.lat(),
+                event.latLng.lng()
+            ];
         });
 
 
