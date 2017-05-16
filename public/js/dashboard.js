@@ -39,3 +39,19 @@ $(document).ready(function () {
     var trafficLayer = new google.maps.TrafficLayer();
     trafficLayer.setMap(map);
 });
+
+function initFires(data){
+    try{
+        var fire = JSON.parse(data);
+        var lat = fire.payload[0];
+        var lng = fire.payload[1];
+
+        var marker = new google.maps.Marker({
+            map: map,
+            position: {lat: lat, lng: lng},
+            draggable: false,
+        });
+    }catch (err){
+        console.log(err);
+    }
+}
