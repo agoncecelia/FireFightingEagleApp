@@ -5,12 +5,14 @@ var bodyParser = require('body-parser');
 var runningPort = 3500;
 var request = require('request');
 var cookieParser = require('cookie-parser');
-var API_URL = 'http://192.168.100.14:3000/api/';
+var flash        = require('req-flash');
+var session      = require('express-session');
+var API_URL = 'http://192.168.100.11:3000/api/';
 
 
 app.set('view engine', 'pug');
 
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 app.use(bodyParser.json({limit: '50mb'}));
 
@@ -20,6 +22,10 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(cookieParser());
+3
+app.use(session({ secret: 'b103bdbe6892ab002bf14d08f9f653a' }));
+
+app.use(flash());
 
 var isAuthenticated = function (req, res, next) {
     if(req.cookies.token){
@@ -44,10 +50,12 @@ var isAuthenticated = function (req, res, next) {
                 if(result.user.role == 'user'){
                     next();
                 }else{
+                    req.flash('errorMessage', 'Session expired!');
                     return res.redirect('/login');
                 }
                 next();
             }catch (e){
+                req.flash('errorMessage', 'Session expired!');
                 return res.redirect('/login');
             }
         });
@@ -79,10 +87,12 @@ var isAuthenticatedAdmin = function (req, res, next) {
                 if(result.user.role == 'admin'){
                     next();
                 }else{
+                    req.flash('errorMessage', 'Session expired!');
                     return res.redirect('/login');
                 }
 
             }catch (e){
+                req.flash('errorMessage', 'Session expired!');
                 return res.redirect('/login');
             }
         });
@@ -97,7 +107,8 @@ app.get('/', isAuthenticated, function (req, res) {
 });
 
 app.get('/login', function (req, res) {
-    return res.render('login')
+    var error = req.flash();
+    return res.render('login', {error: error.errorMessage})
 });
 
 app.get('/admin', isAuthenticatedAdmin, function (req, res) {
@@ -159,7 +170,33 @@ app.get('/pendingusers', function (req, res) {
             return res.status(500).send(e);
         }
     });
-})
+});
+
+app.get('/refreshfires', function (req, res) {
+    var token = req.cookies.token;
+
+    request.get({
+        headers: {
+            'content-type' : 'application/x-www-form-urlencoded',
+            'Authorization' : token
+        },
+        url:     API_URL + 'getActiveFires',
+        form:    {}
+    }, function(error, response, body){
+        if(error){
+            return res.status(500).send(error);
+        }
+
+        try{
+            var result = JSON.parse(body);
+
+            return res.send(result);
+
+        }catch (e){
+            return res.status(500).send(e);
+        }
+    });
+});
 
 app.post('/approveuser', function (req, res) {
     var token = req.cookies.token;
@@ -205,23 +242,20 @@ app.post('/authenticate', function (req, res) {
             return res.status(500).send(error);
         }
 
-        try{
-            var result = JSON.parse(body);
-            if(result.success){
-                if(result.user.role == "admin"){
-                    res.cookie('token', result.token);
+        var result = JSON.parse(body);
+        if(result.success){
+            if(result.user.role == "admin"){
+                res.cookie('token', result.token);
 
-                    return res.redirect('/admin');
-                }else{
-                    res.cookie('token', result.token);
-
-                    return res.redirect('/');
-                }
+                return res.redirect('/admin');
             }else{
-                return res.status(401).send("Wrong username or password")
+                res.cookie('token', result.token);
+
+                return res.redirect('/');
             }
-        }catch (e){
-            return res.status(500).send(e);
+        }else{
+            req.flash('errorMessage', 'Wrong username or password');
+            return res.redirect('/login');
         }
     });
 

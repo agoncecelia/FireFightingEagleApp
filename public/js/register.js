@@ -67,8 +67,8 @@ $('body').on('click', '#btnFinishPolygon', function () {
 
     request(register, 'POST', 'register', function (response) {
         var result = response.responseJSON;
-        alert(result.msg);
         if(result.success){
+            alert(result.msg);
             location.href = '/login';
         }
     })

@@ -11,6 +11,9 @@ html
                     div.login-inputs-div
                         form(action='/authenticate', method='post')
                             div.form-group
+                                if(error)
+                                    div.alert.alert-danger #{error}
+                            div.form-group
                                 input.form-control(type='text', name='username', placeholder='username', required='required')
                             div.form-group
                                 input.form-control(type='password', name='password', placeholder='password', required='required')
@@ -19,5 +22,6 @@ html
                             div.col-md-6.form-group.text-right
                                 button.btn(type='submit') Login
                             div.form-group.text-right
-                                a(href='#') Forgot password?
+                                //a(href='#') Forgot password?
+                            br
 

@@ -2,13 +2,14 @@ html
     head
         title Dashboard
         link(rel='stylesheet', href='/css/admin.css')
+        script(src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js")
         script(src='https://maps.googleapis.com/maps/api/js?libraries=places,drawing&key=AIzaSyDK4wSHzyqJ0xctjnM6OFEoRIAd5fMa2qM')
         include includes/header
     body
         include includes/mapmodal
         div.left-panel
             ul.list-group.requests-div
-                li.list-group-item.pendings Register Requests
+                li.list-group-item.pendings Pending Requests
                     span.badge
             div.pendings-div
                 ul.list-group.pendings-list

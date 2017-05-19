@@ -12,7 +12,9 @@
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
+    "express-session": "^1.15.3",
     "pug": "^2.0.0-rc.1",
+    "req-flash": "0.0.3",
     "request": "^2.81.0"
   }
 }

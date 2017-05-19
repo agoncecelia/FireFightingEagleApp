@@ -1,4 +1,6 @@
 var map;
+var markerCluster;
+var activeFires = [];
 
 $('.pendings span').text(pendings.counter);
 
@@ -43,22 +45,22 @@ $('body').on('click', '.pending-li', function () {
     });
 
     try {
-        var servingArea = JSON.parse(pengingData.servingArea);
-        var location = JSON.parse(pengingData.departmentLocation);
+        var servingArea = pengingData.servingArea.coordinates;
+        var location = pengingData.departmentLocation.coordinates;
 
         var marker = new google.maps.Marker({
             map: dMap,
             draggable: false,
-            position: {lat: location.coordinates.latitude, lng: location.coordinates.longitude}
+            position: {lat: location[0], lng: location[1]}
         });
 
         var coords = [];
 
-        for(var i = 0; i < servingArea.coordinates.length; i++){
-            var row = servingArea.coordinates[i];
+        for(var i = 0; i < servingArea[0].length; i++){
+            var row = servingArea[0][i];
             coords.push({
-                lat: row.latitude,
-                lng: row.longitude
+                lat: row[0],
+                lng: row[1]
             })
         }
 
@@ -117,3 +119,5 @@ function initMap() {
 }
 
 initMap();
+
+refreshFires();

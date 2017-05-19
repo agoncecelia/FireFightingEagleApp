@@ -1,4 +1,7 @@
 var map;
+var markerCluster;
+var activeFires = [];
+var reportedFire = null;
 
 $(document).ready(function () {
     var userLocation = user.departmentLocation;
@@ -46,12 +49,15 @@ function initFires(data){
         var lat = fire.payload[0];
         var lng = fire.payload[1];
 
-        var marker = new google.maps.Marker({
+        reportedFire = new google.maps.Marker({
             map: map,
             position: {lat: lat, lng: lng},
             draggable: false,
+            icon: "/images/placeholder.svg"
         });
     }catch (err){
         console.log(err);
     }
 }
+
+refreshFires();

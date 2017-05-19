@@ -53,4 +53,44 @@ google.maps.Polygon.prototype.getBounds = function() {
         }
     }
     return bounds;
+};
+
+function refreshFires() {
+    request({}, 'GET', 'refreshfires', function (response) {
+        var result = response.responseJSON;
+        clearMarkers();
+        activeFires = [];
+
+        if(result.response.length){
+            for(var i = 0; i < result.response.length; i++){
+                activeFires[i] = new google.maps.Marker({
+                    map: map,
+                    position: {lat: result.response[i].latitude, lng: result.response[i].longitude},
+                    draggable: false,
+                    icon: "/images/placeholder.png"
+                });
+
+            }
+            markerCluster = new MarkerClusterer(map, activeFires,
+                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        }
+
+        setTimeout(function () {
+            refreshFires();
+        }, 300000);
+    });
+}
+
+function clearMarkers() {
+    if(activeFires.length){
+        for(var i = 0; i < activeFires.length; i++){
+            activeFires[i].setMap(null);
+        }
+
+        if(reportedFire != null){
+            reportedFire.setMap(null);
+        }
+
+        markerCluster.clearMarkers(null);
+    }
 }
