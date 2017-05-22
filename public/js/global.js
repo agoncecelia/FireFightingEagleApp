@@ -33,7 +33,7 @@ function validateInputs(inputClass) {
 function request(inputs, type, route, callback) {
     $.ajax({
         type: type,
-        url: 'https://firefightingeagle.herokuapp.com/' + route,
+        url: 'https://ffedemo.herokuapp.com/' + route,
         data: inputs,
         error:function (xhr, ajaxOptions, thrownError){
             alert("Something went wrong!");
