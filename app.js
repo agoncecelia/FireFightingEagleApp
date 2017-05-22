@@ -2,13 +2,13 @@ var express = require('express')
 var app = express();
 var fs = require('fs');
 var bodyParser = require('body-parser');
-var runningPort = 3500;
 var request = require('request');
 var cookieParser = require('cookie-parser');
 var flash        = require('req-flash');
 var session      = require('express-session');
 var API_URL = 'https://firefightingeagle.herokuapp.com/api/';
 
+var runningPort = process.env.PORT || 3500;
 
 app.set('view engine', 'pug');
 
