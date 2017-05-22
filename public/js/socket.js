@@ -1,5 +1,5 @@
 function initSocket() {
-    var socket = new WebSocket("ws://192.168.100.14:3000");
+    var socket = new WebSocket("ws://firefightingeagle.herokuapp.com");
     socket.onopen = function() {
         this.send(JSON.stringify({
             "id": user.id,
