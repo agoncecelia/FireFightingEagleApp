@@ -7,7 +7,7 @@ var request = require('request');
 var cookieParser = require('cookie-parser');
 var flash        = require('req-flash');
 var session      = require('express-session');
-var API_URL = 'http://192.168.100.11:3000/api/';
+var API_URL = 'https://firefightingeagle.herokuapp.com/api/';
 
 
 app.set('view engine', 'pug');
