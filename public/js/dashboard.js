@@ -53,7 +53,7 @@ function initFires(data){
             map: map,
             position: {lat: lat, lng: lng},
             draggable: false,
-            icon: "/images/placeholder.svg"
+            icon: "/images/placeholder.png"
         });
     }catch (err){
         console.log(err);
