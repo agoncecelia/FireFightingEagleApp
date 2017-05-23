@@ -1,3 +1,10 @@
+body{
+    background: url(/images/bg.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 .register-container{
     margin-top: 7em;
 }
@@ -9,10 +16,10 @@
 }
 .register-main-div{
     padding: 15px;
-    background-color: #414751;
+    background-color: rgba(195, 192, 192, 0.78);
 }
 .register-main-div legend{
-    color: #fff;
+    color: #414751;
 }
 .register-main-div button, .register-map button{
     border-radius: 0;
@@ -37,4 +44,7 @@
     position: absolute;
     bottom: 10px;
     right: 10px;
+}
+#mapDesc{
+    color: #fff;
 }
